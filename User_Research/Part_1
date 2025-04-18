@@ -1,0 +1,40 @@
+# Before you get started with users [+3]
+1. [+1] As a group, discuss any assumptions you have about your users or usage contexts.
+Consider aspects such as language, age, dis/ability, indoors/outdoors, alone vs. small group vs. family vs. large social gathering, etc. Write a summary of your discussion and a clear statement of your assumptions going into user research.
+
+Summary: Our users are individuals seeking to practice coding problems for job interviews, for self-enjoyment, or to improve their coding ability. They are generally doing so alone or in small groups. Our users are English-speaking as programming languages use English for code and documentation. 
+
+2. [+1] As a group, share any hunches you want to test or unknown/open-ended questions you want to answer through user research. Summarize your discussion, listing out 2-3 things you want to learn through user research.
+A hunch we would like to test is that students would be more likely to practice Leetcode style questions if they are able to compete with their peers and other people via a leaderboard
+We would like to answer the question: Does practicing in a group or practicing alone help foster more learning and growth in coding skills?
+What learning methods other than writing leetcode questions 
+
+Summary: A hunch we would like to test is that students are more likely to practice LeetCode style problems if they are able to compete with their peers and others via a leaderboard. Through user research, we want to learn whether practicing in a group fosters more learning and growth.
+
+3. [+1] Write your user research protocol. Include the following: 
+Recruitment strategy (e.g., whom to contact, how to contact, how many); any contingency plans in case you cannot reach 10-15 potential users
+
+Whom to contact: 
+CS Student preparing for job search
+CS Student who’s searching for job
+Software Engineer who’s working in the industry
+Students who like to do intellectual challenges
+
+Time and place for each user research session (e.g., “in the afternoons, in person, in a meeting room”)
+In person, on campus during weekdays
+
+How many: We will all interview 3 students about their experiences.
+
+Each member’s role and responsibilities (e.g., For interviews: interviewer, note-taker, discussant, etc.)
+
+Each of us will act as the interviewer and note-taker when we conduct our interviews. Since we will be able to maximize our time and reach if we conduct interviews at different times and locations, we will all separately take notes on our interviewees and share our findings with each other. 
+We will also participate as a discussant during the unstructured part of the interview so we can get more insight from our participants.
+# Initial round of user research [+3.5]
+[+2] Prepare interview questions/script
+
+List a few challenges that discourage you from practicing leetcode/interview questions daily.
+Not enough time?
+No motivation?
+Too difficult?
+Have you worked on interview practice problems in a group setting, or do you think that being in a collaborative/competitive environment would improve your skills?
+Do you have any specific plans for practicing the problems? Such as how many problems to do in a week, what topics to do, any problem sets to follow …
