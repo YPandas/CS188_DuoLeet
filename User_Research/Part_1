@@ -5,25 +5,24 @@ Consider aspects such as language, age, dis/ability, indoors/outdoors, alone vs.
 Summary: Our users are individuals seeking to practice coding problems for job interviews, for self-enjoyment, or to improve their coding ability. They are generally doing so alone or in small groups. Our users are English-speaking as programming languages use English for code and documentation. 
 
 2. [+1] As a group, share any hunches you want to test or unknown/open-ended questions you want to answer through user research. Summarize your discussion, listing out 2-3 things you want to learn through user research.
-A hunch we would like to test is that students would be more likely to practice Leetcode style questions if they are able to compete with their peers and other people via a leaderboard
-We would like to answer the question: Does practicing in a group or practicing alone help foster more learning and growth in coding skills?
-What learning methods other than writing leetcode questions 
 
-Summary: A hunch we would like to test is that students are more likely to practice LeetCode style problems if they are able to compete with their peers and others via a leaderboard. Through user research, we want to learn whether practicing in a group fosters more learning and growth.
+Summary: A hunch we would like to test is that students are more likely to practice LeetCode style problems if they are able to compete with their peers and others via a leaderboard. Through user research, we want to learn whether practicing in a group fosters more learning and growth in coding skills compared to practicing alone. We also want to find out if there are other learning methods that users employ besides LeetCode problems. 
 
 3. [+1] Write your user research protocol. Include the following: 
 Recruitment strategy (e.g., whom to contact, how to contact, how many); any contingency plans in case you cannot reach 10-15 potential users
 
 Whom to contact: 
-CS Student preparing for job search
-CS Student who’s searching for job
+CS Student preparing for an interview
+CS Student who’s searching for job 
 Software Engineer who’s working in the industry
 Students who like to do intellectual challenges
 
 Time and place for each user research session (e.g., “in the afternoons, in person, in a meeting room”)
 In person, on campus during weekdays
 
-How many: We will all interview 3 students about their experiences.
+How many: 
+We will each interview 3 individuals about their experiences.
+Contingency Plan: In case we can’t interview 3 students each, we will discuss on Slack to see what we can do before the deadline.
 
 Each member’s role and responsibilities (e.g., For interviews: interviewer, note-taker, discussant, etc.)
 
