@@ -50,13 +50,7 @@ function MainPage() {
   return (
     <div className="container">
       <h1 className="app-title">Duo-Leetcode</h1>
-              <h2 className="section-title">Practice</h2>
-      <div className="generate-wrapper">
-        <button className="btn" onClick={fetchQuestion} disabled={loading}>
-          {loading ? "Loading..." : "Generate Question"}
-        </button>
-      </div>
-      {/* Learn section */}
+       {/* Learn section */}
       <div className="section">
         <h2 className="section-title">Learn</h2>
         <div className="learn-buttons">
@@ -77,6 +71,13 @@ function MainPage() {
           </div>
         )}
       </div>
+              <h2 className="section-title">Practice</h2>
+      <div className="generate-wrapper">
+        <button className="btn" onClick={fetchQuestion} disabled={loading}>
+          {loading ? "Loading..." : "Generate Question"}
+        </button>
+      </div>
+     
       {question && (
         <div className="section">
           <h2 className="section-title">Problem:</h2>
