@@ -1,18 +1,21 @@
 # Dependencies
-/node_modules
+/client/node_modules
+/server/node_modules
 /.pnp
 .pnp.js
 
 # Testing
-/coverage
+/client/coverage
+/server/coverage
 
 # Production
-/build
+/client/build
+/server/build
 
 # Misc
 .DS_Store
 .env
-.env.local
+/server/.env.local
 .env.development.local
 .env.test.local
 .env.production.local
@@ -26,4 +29,4 @@ yarn-error.log*
 .idea
 .vscode
 *.swp
-*.swo 
+*.swo
