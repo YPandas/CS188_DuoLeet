@@ -9,6 +9,13 @@ function MainPage() {
   const [evaluation, setEvaluation] = useState("");
   const [isCorrect, setIsCorrect] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [selectedTopic, setSelectedTopic] = useState(null);
+  // Topics for Learn section
+  const topics = {
+    Arrays: "Arrays are fixed-size, index-based collections allowing O(1) access by index. Inserting or deleting elements can take O(n) as others shift.",
+    Recursion: "Recursion is when functions call themselves to solve smaller instances of a problem. It needs a base case to stop, else it loops infinitely.",
+    "Dynamic Programming": "Dynamic Programming optimizes by solving overlapping subproblems once and storing results (memoization) or building up (tabulation)."
+  };
 
   const fetchQuestion = async () => {
     setLoading(true);
@@ -43,9 +50,33 @@ function MainPage() {
   return (
     <div className="container">
       <h1 className="app-title">Duo-Leetcode</h1>
-      <button className="btn" onClick={fetchQuestion} disabled={loading}>
-        {loading ? "Loading..." : "Generate Question"}
-      </button>
+              <h2 className="section-title">Practice</h2>
+      <div className="generate-wrapper">
+        <button className="btn" onClick={fetchQuestion} disabled={loading}>
+          {loading ? "Loading..." : "Generate Question"}
+        </button>
+      </div>
+      {/* Learn section */}
+      <div className="section">
+        <h2 className="section-title">Learn</h2>
+        <div className="learn-buttons">
+          {Object.keys(topics).map((topic) => (
+            <button
+              key={topic}
+              className="btn learn-btn"
+              onClick={() => setSelectedTopic(topic)}
+            >
+              {topic}
+            </button>
+          ))}
+        </div>
+        {selectedTopic && (
+          <div className="topic-summary">
+            <h3>{selectedTopic}</h3>
+            <p>{topics[selectedTopic]}</p>
+          </div>
+        )}
+      </div>
       {question && (
         <div className="section">
           <h2 className="section-title">Problem:</h2>
