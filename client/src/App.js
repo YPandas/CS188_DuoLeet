@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import Leaderboard from "./components/Leaderboard";
 import "./index.css";
 
-function App() {
+function MainPage() {
   const [question, setQuestion] = useState("");
   const [userAnswer, setUserAnswer] = useState("");
   const [evaluation, setEvaluation] = useState("");
@@ -73,6 +75,22 @@ function App() {
         </div>
       )}
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <nav className="navigation">
+        <Link to="/" className="btn nav-btn">🏠 Home</Link>
+        <Link to="/leaderboard" className="btn nav-btn">🏆 Leaderboard</Link>
+      </nav>
+      
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
+      </Routes>
+    </Router>
   );
 }
 

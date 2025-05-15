@@ -42,7 +42,7 @@
   /* Button styling */
   .btn {
     display: inline-block;
-    background-color: #007bff;
+    background-color: #80a9d7;
     color: #fff;
     border: none;
     padding: 0.75em 1.5em;
@@ -59,7 +59,7 @@
   }
   
   .btn:hover:not(:disabled) {
-    background-color: #0056b3;
+    background-color: #85a2c2;
   }
   
   /* Textarea styling */
@@ -86,4 +86,130 @@
   /* Section spacing */
   .section {
     margin-top: 2em;
+  }
+
+  .navigation {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-bottom: 2em;
+    padding-right: 2em;
+  }
+
+  .nav-btn {
+    text-decoration: none;
+    margin-top: 0;
+  }
+
+  .nav-btn:hover {
+    text-decoration: none;
+  }
+
+  .podium {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 10px;
+    margin: 50px auto;
+    height: 300px;
+  }
+
+  .podium-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .rank { 
+    position: absolute;
+    top: 60%;
+    font-size: 35px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(190, 114, 6, 0.699);
+    z-index: 1;
+  }
+
+  .podium-block {
+    width: 150px;
+    background-color: #ffd700;
+    border-radius: 8px 8px 0 0;
+    position: relative;
+  }
+
+  .first-place .podium-block {
+    height: 200px;
+    background-color: #ffd90092;
+  }
+
+  .second-place .podium-block {
+    height: 150px;
+    background-color: #c7e6d1;
+  }
+
+  .third-place .podium-block {
+    height: 100px;
+    background-color: #f0a1bfe7;
+    
+  }
+
+  .avatar {
+    width: 120px;
+    height: 120px;
+  }
+
+  .first-place .avatar {
+    width: 120px;
+    height: 120px;
+  }
+
+  .second-place .avatar {
+    width: 100px;
+    height: 140px;
+  }
+
+  .third-place .avatar {
+    width: 120px;
+    height: 120px;
+  }
+
+  .leaderboard-table {
+    margin-top: 40px;
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+
+  th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #333;
+  }
+
+  tr:hover {
+    background-color: #f5f5f5;
+  }
+
+  tbody tr:nth-child(1) {
+    background-color: #ffd9003c;
+  }
+
+  tbody tr:nth-child(2) {
+    background-color: #c7e6d170;
+  }
+
+  tbody tr:nth-child(3) {
+    background-color: #f0a1bf34
   }
