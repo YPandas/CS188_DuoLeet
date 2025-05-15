@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import fox2 from '../avatar/fox2.png';  // Import the avatar
+import fox3 from '../avatar/fox3.png';  // Import the avatar
 import giraffe2 from '../avatar/giraffe2.png';
 import wolf1 from '../avatar/wolf1.png';
 
@@ -21,7 +21,7 @@ function Leaderboard() {
           <div className="podium-block"></div>
         </div>
         <div className="podium-item first-place">
-          <img src={fox2} alt="Champion" className="avatar" />
+          <img src={fox3} alt="Champion" className="avatar" />
           <div className="rank">1</div>
           <div className="podium-block"></div>
         </div>
