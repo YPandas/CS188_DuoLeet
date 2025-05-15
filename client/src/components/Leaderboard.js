@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import fox2 from '../avatar/fox2.png';  // Import the avatar
 import giraffe2 from '../avatar/giraffe2.png';
 import wolf1 from '../avatar/wolf1.png';
 
 function Leaderboard() {
+  const [entries, setEntries] = useState([]);
+  useEffect(() => {
+    fetch('http://localhost:5001/api/leaderboard')
+      .then(res => res.json())
+      .then(data => setEntries(data.leaderboard || []))
+      .catch(err => console.error('Error loading leaderboard:', err));
+  }, []);
   return (
     <div className="container">
       <h1 className="app-title">Leaderboard</h1>
@@ -26,48 +33,32 @@ function Leaderboard() {
       </div>
 
       <div className="leaderboard-table">
-        <table>
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>User Name</th>
-              <th>Streak 🔥</th>
-              <th>Pet Level 🌟</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td>CodeMaster</td>
-              <td>15 days</td>
-              <td>Level 5</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>AlgoNinja</td>
-              <td>12 days</td>
-              <td>Level 4</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>ByteWarrior</td>
-              <td>10 days</td>
-              <td>Level 4</td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>StackOverflowPro</td>
-              <td>8 days</td>
-              <td>Level 3</td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td>BugHunter</td>
-              <td>7 days</td>
-              <td>Level 3</td>
-            </tr>
-          </tbody>
-        </table>
+          <table>
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>User Name</th>
+                <th>Streak 🔥</th>
+                <th>Pet Level 🌟</th>
+              </tr>
+            </thead>
+            <tbody>
+              {entries.length > 0 ? (
+                entries.map((entry, idx) => (
+                  <tr key={entry.username}>
+                    <td>{idx + 1}</td>
+                    <td>{entry.username}</td>
+                    <td>{entry.score} days</td>
+                    <td>-</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4">No entries yet.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
       </div>
     </div>
   );

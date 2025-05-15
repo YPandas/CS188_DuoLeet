@@ -7,6 +7,7 @@ function MainPage() {
   const [question, setQuestion] = useState("");
   const [userAnswer, setUserAnswer] = useState("");
   const [evaluation, setEvaluation] = useState("");
+  const [isCorrect, setIsCorrect] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const fetchQuestion = async () => {
@@ -27,13 +28,12 @@ function MainPage() {
     try {
       const response = await fetch("http://localhost:5001/api/verify", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question, userAnswer })
       });
       const data = await response.json();
       setEvaluation(data.evaluation);
+      setIsCorrect(data.isCorrect);
     } catch (error) {
       console.error("Error verifying answer:", error);
     }
@@ -42,7 +42,7 @@ function MainPage() {
 
   return (
     <div className="container">
-      <h1 className="app-title">Programming Interview Practice App</h1>
+      <h1 className="app-title">Duo-Leetcode</h1>
       <button className="btn" onClick={fetchQuestion} disabled={loading}>
         {loading ? "Loading..." : "Generate Question"}
       </button>
@@ -72,6 +72,37 @@ function MainPage() {
         <div className="section">
           <h2 className="section-title">AI Evaluation:</h2>
           <pre className="content-box">{evaluation}</pre>
+          {isCorrect && (
+            <button
+              className="btn"
+              onClick={async () => {
+                setLoading(true);
+                try {
+                  // Fetch logged-in user from backend
+                  const userRes = await fetch('http://localhost:5001/api/user');
+                  if (!userRes.ok) throw new Error('Failed to fetch user info');
+                  const userData = await userRes.json();
+                  const { username } = userData;
+                  if (!username) throw new Error('No username returned');
+                  // Submit score for this user
+                  const scoreRes = await fetch('http://localhost:5001/api/score', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username })
+                  });
+                  if (!scoreRes.ok) throw new Error('Failed to add to leaderboard');
+                  window.alert('Added to leaderboard!');
+                } catch (err) {
+                  console.error('Error adding to leaderboard:', err);
+                  window.alert('Could not add to leaderboard: Please Implement Backend');
+                } finally {
+                  setLoading(false);
+                }
+              }}
+            >
+              Add to Leaderboard
+            </button>
+          )}
         </div>
       )}
     </div>
