@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes, Link, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Leaderboard from "./components/Leaderboard";
 import Onboarding from "./components/Onboarding";
 import OAuth2RedirectHandler from "./components/OAuth2RedirectHandler";
 import "./index.css";
+import SignIn from './components/auth/SignIn';
+import SignUp from './components/auth/SignUp';
+import PlanSelection from './components/onboarding/PlanSelection';
+import OrganizationSetup from './components/onboarding/OrganizationSetup';
 
 function MainPage() {
   const [question, setQuestion] = useState("");
@@ -25,21 +29,6 @@ function MainPage() {
       setUser(data.user);
     } catch (error) {
       console.error('Error checking auth status:', error);
-    }
-  };
-
-  const handleLogin = () => {
-    window.location.href = 'http://localhost:5001/auth/google';
-  };
-
-  const handleLogout = async () => {
-    try {
-      await fetch('http://localhost:5001/auth/logout', {
-        credentials: 'include'
-      });
-      setUser(null);
-    } catch (error) {
-      console.error('Error logging out:', error);
     }
   };
 
@@ -77,16 +66,17 @@ function MainPage() {
     setLoading(false);
   };
 
-  if (!user) {
-    return (
-      <div className="container">
-        <h1 className="app-title">Programming Interview Practice App</h1>
-        <button className="btn" onClick={handleLogin}>
-          Sign in with Google
-        </button>
-      </div>
-    );
-  }
+  // if (!user) {
+  //   return (
+  //     <div className="container">
+  //       <h1 className="app-title">Programming Interview Practice App</h1>
+  //       <div className="auth-buttons">
+  //         <Link to="/signin" className="btn">Sign In</Link>
+  //         <Link to="/signup" className="btn">Sign Up</Link>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="container">
@@ -136,8 +126,12 @@ function App() {
       
       <Routes>
         <Route path="/" element={<MainPage />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/onboarding" element={<Onboarding />} />
+        <Route path="/onboarding/plan" element={<PlanSelection />} />
+        <Route path="/onboarding/organization" element={<OrganizationSetup />} />
         <Route path="/oauth2/redirect/google" element={<OAuth2RedirectHandler />} />
       </Routes>
     </Router>
