@@ -20,28 +20,28 @@ const UserSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        minlength: [8, 'Password must be at least 8 characters long'],
+        minlength: [6, 'Password must be at least 6 characters long'],
         select: false // Don't include password in queries by default
     },
     googleId: String,
     isVerified: {
         type: Boolean,
-        default: false
+        default: true  // Always verified by default now
     },
-    verificationToken: String,
-    verificationTokenExpires: Date,
     onBoardingInfo: {
         reason: String,
         goal: {
             daily: {
-                type: Number
+                type: Number,
+                min: [0, 'Daily goal cannot be negative']
             },
             weekly: {
                 type: Number,
-                required: [true, 'Weekly goal is required']
+                min: [0, 'Weekly goal cannot be negative']
             },
             monthly: {
-                type: Number
+                type: Number,
+                min: [0, 'Monthly goal cannot be negative']
             }
         },
         school: {
@@ -89,12 +89,14 @@ UserSchema.methods.comparePassword = async function(candidatePassword) {
 
 // Method to check if profile is complete
 UserSchema.methods.isProfileComplete = function() {
-    return this.profileCompleted && 
-           this.onBoardingInfo.reason &&
-           this.onBoardingInfo.goal.daily &&
-           this.onBoardingInfo.goal.weekly &&
-           this.onBoardingInfo.goal.monthly &&
-           this.onBoardingInfo.school;
+    // Basic profile requirements
+    const hasBasicInfo = this.onBoardingInfo.reason && this.onBoardingInfo.school;
+    
+    // Check if any goal is set (not required, but if set must be valid)
+    const goals = this.onBoardingInfo.goal || {};
+    const hasValidGoals = true; // Goals are now optional
+    
+    return hasBasicInfo && hasValidGoals;
 };
 
 // Method to update profile

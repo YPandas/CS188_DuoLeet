@@ -8,7 +8,7 @@ const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
+        pass: process.env.EMAIL_APP_PASSWORD  // Using App Password instead of regular password
     }
 });
 
@@ -20,7 +20,7 @@ const checkUsername = async (username) => {
 
 // Register new user
 const register = async (userData) => {
-    const { email, username, password } = userData;
+    const { email, username, password, onboarding } = userData;
 
     // Check if user already exists
     const existingUser = await User.findOne({ 
@@ -31,58 +31,32 @@ const register = async (userData) => {
         throw new Error('User with this email or username already exists');
     }
 
-    // Generate verification token
-    const verificationToken = crypto.randomBytes(32).toString('hex');
-    const verificationTokenExpires = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
+    // Map frontend onboarding data to match MongoDB schema
+    const onBoardingInfo = {
+        school: onboarding?.organization || '',
+        goal: {
+            daily: onboarding?.plan?.daily || null,
+            weekly: onboarding?.plan?.weekly || null,
+            monthly: onboarding?.plan?.monthly || null
+        },
+        peers: onboarding?.peers || []
+    };
 
     // Create new user
     const user = new User({
         email,
         username,
         password,
-        verificationToken,
-        verificationTokenExpires
+        onBoardingInfo
     });
 
-    await user.save();
-
-    // Send verification email
-    const verificationUrl = `${process.env.FRONTEND_URL}/verify-email/${verificationToken}`;
-    await transporter.sendMail({
-        to: email,
-        subject: 'Verify your email',
-        html: `
-            <h1>Email Verification</h1>
-            <p>Please click the link below to verify your email address:</p>
-            <a href="${verificationUrl}">${verificationUrl}</a>
-            <p>This link will expire in 24 hours.</p>
-        `
-    });
-
-    return { message: 'Registration successful. Please check your email to verify your account.' };
-};
-
-// Verify email
-const verifyEmail = async (token) => {
-    const user = await User.findOne({
-        verificationToken: token,
-        verificationTokenExpires: { $gt: Date.now() }
-    });
-
-    if (!user) {
-        throw new Error('Invalid or expired verification token');
-    }
-
-    user.isVerified = true;
-    user.verificationToken = undefined;
-    user.verificationTokenExpires = undefined;
     await user.save();
 
     // Generate token pair
     const tokens = await TokenService.generateTokenPair(user);
 
     return { 
-        message: 'Email verified successfully',
+        message: 'Registration successful',
         ...tokens
     };
 };
@@ -96,11 +70,6 @@ const login = async (credentials) => {
     
     if (!user) {
         throw new Error('Invalid credentials');
-    }
-
-    // Check if user is verified
-    if (!user.isVerified) {
-        throw new Error('Please verify your email first');
     }
 
     // Check password
@@ -157,7 +126,6 @@ const getProfileStatus = async (userId) => {
 module.exports = {
     checkUsername,
     register,
-    verifyEmail,
     login,
     refreshToken,
     logout,

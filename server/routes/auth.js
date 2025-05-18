@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
-const { verifyToken } = require('../middleware/auth');
+const verifyToken = require('../middleware/auth');
 
 // Check username availability
 router.get('/check-username/:username', async (req, res) => {
@@ -9,7 +9,7 @@ router.get('/check-username/:username', async (req, res) => {
         const result = await authController.checkUsername(req.params.username);
         res.json(result);
     } catch (error) {
-        res.status(500).json({ error: 'Error checking username availability' });
+        res.status(400).json({ error: error.message });
     }
 });
 
@@ -18,16 +18,6 @@ router.post('/register', async (req, res) => {
     try {
         const result = await authController.register(req.body);
         res.status(201).json(result);
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-});
-
-// Verify email
-router.get('/verify-email/:token', async (req, res) => {
-    try {
-        const result = await authController.verifyEmail(req.params.token);
-        res.json(result);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -46,11 +36,7 @@ router.post('/login', async (req, res) => {
 // Refresh token
 router.post('/refresh-token', async (req, res) => {
     try {
-        const { refreshToken } = req.body;
-        if (!refreshToken) {
-            return res.status(400).json({ error: 'Refresh token is required' });
-        }
-        const result = await authController.refreshToken(refreshToken);
+        const result = await authController.refreshToken(req.body.refreshToken);
         res.json(result);
     } catch (error) {
         res.status(401).json({ error: error.message });
@@ -60,11 +46,7 @@ router.post('/refresh-token', async (req, res) => {
 // Logout
 router.post('/logout', async (req, res) => {
     try {
-        const { refreshToken } = req.body;
-        if (!refreshToken) {
-            return res.status(400).json({ error: 'Refresh token is required' });
-        }
-        const result = await authController.logout(refreshToken);
+        const result = await authController.logout(req.body.refreshToken);
         res.json(result);
     } catch (error) {
         res.status(400).json({ error: error.message });
