@@ -1,7 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
-const verifyToken = require('../middleware/auth');
+const { verifyToken } = require('../middleware/auth');
+
+// Check auth status
+router.get('/status', verifyToken, async(req, res) => {
+    try {
+        const user = await authController.getUserStatus(req.user.id);
+        res.json({ user });
+    } catch (error) {
+        res.status(401).json({ user: null });
+    }
+})
 
 // Check username availability
 router.get('/check-username/:username', async (req, res) => {

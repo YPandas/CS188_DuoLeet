@@ -1,35 +1,24 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
 function SignIn() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
     const navigate = useNavigate();
+    const { login } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('loggin attempt with: ', {email, password});
-
+        setError('');
+        
         try {
-            const response = await fetch('http://localhost:5001/api/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email, password })
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                localStorage.setItem('accessToken', data.accessToken);
-                localStorage.setItem('refreshToken', data.refreshToken);
-                navigate('/');
-            } else {
-                const errorData = await response.json();
-                console.error('Login failed: ', errorData.error);
-            }
+            await login(email, password);
+            navigate('/');
         } catch (error) {
-            console.error('Login error: ', error);
+            setError(error.message || 'Failed to sign in');
+            console.error('Login error:', error);
         }
     }
 
@@ -40,6 +29,7 @@ function SignIn() {
     return (
         <div className="auth-container">
             <h2>Sign In</h2>
+            {error && <div className="error-message">{error}</div>}
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label>Email address</label>

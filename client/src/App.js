@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Routes, Link, Navigate } from "react-router-dom";
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Leaderboard from "./components/Leaderboard";
 import Onboarding from "./components/Onboarding";
 import OAuth2RedirectHandler from "./components/OAuth2RedirectHandler";
@@ -14,29 +15,17 @@ function MainPage() {
   const [userAnswer, setUserAnswer] = useState("");
   const [evaluation, setEvaluation] = useState("");
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    checkAuthStatus();
-  }, []);
-
-  const checkAuthStatus = async () => {
-    try {
-      const response = await fetch('http://localhost:5001/auth/status', {
-        credentials: 'include'
-      });
-      const data = await response.json();
-      setUser(data.user);
-    } catch (error) {
-      console.error('Error checking auth status:', error);
-    }
-  };
+  const { user } = useAuth();
 
   const fetchQuestion = async () => {
     setLoading(true);
     setEvaluation("");
     try {
+      const accessToken = localStorage.getItem('accessToken');
       const response = await fetch("http://localhost:5001/api/question", {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
         credentials: 'include'
       });
       const data = await response.json();
@@ -50,10 +39,12 @@ function MainPage() {
   const submitAnswer = async () => {
     setLoading(true);
     try {
+      const accessToken = localStorage.getItem('accessToken');
       const response = await fetch("http://localhost:5001/api/verify", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${accessToken}`
         },
         credentials: 'include',
         body: JSON.stringify({ question, userAnswer })
@@ -66,17 +57,10 @@ function MainPage() {
     setLoading(false);
   };
 
-  // if (!user) {
-  //   return (
-  //     <div className="container">
-  //       <h1 className="app-title">Programming Interview Practice App</h1>
-  //       <div className="auth-buttons">
-  //         <Link to="/signin" className="btn">Sign In</Link>
-  //         <Link to="/signup" className="btn">Sign Up</Link>
-  //       </div>
-  //     </div>
-  //   );
-  // }
+  // Protected route check
+  if (!user) {
+    return <Navigate to="/signin" />;
+  }
 
   return (
     <div className="container">
@@ -116,12 +100,17 @@ function MainPage() {
   );
 }
 
-function App() {
+function AppContent() {
+  const { user, logout } = useAuth();
+  
   return (
     <Router>
       <nav className="navigation">
         <Link to="/" className="btn nav-btn">🏠 Home</Link>
         <Link to="/leaderboard" className="btn nav-btn">🏆 Leaderboard</Link>
+        {user && (
+          <button onClick={logout} className="btn nav-btn">🚪 Logout</button>
+        )}
       </nav>
       
       <Routes>
@@ -135,6 +124,14 @@ function App() {
         <Route path="/oauth2/redirect/google" element={<OAuth2RedirectHandler />} />
       </Routes>
     </Router>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 
