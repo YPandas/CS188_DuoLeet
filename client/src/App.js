@@ -145,7 +145,7 @@ function MainPage() {
         credentials: 'include',
         body: JSON.stringify({ question, userAnswer })
       });
-      const data = await res.json();
+      const data = await response.json();
       setEvaluation(data.evaluation);
       setIsCorrect(data.isCorrect);
     } catch (err) {
