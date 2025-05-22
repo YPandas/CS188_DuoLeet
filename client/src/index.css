@@ -242,3 +242,142 @@
   tbody tr:nth-child(3) {
     background-color: #f0a1bf34
   }
+  /* Onboarding styles */
+  .onboarding-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2em;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .step {
+    margin-bottom: 2em;
+  }
+
+  .step h2 {
+    margin-bottom: 1.5em;
+    color: #333;
+    text-align: center;
+  }
+
+  .select-input,
+  .text-input,
+  .number-input {
+    width: 100%;
+    padding: 0.8em;
+    margin-bottom: 1em;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
+  }
+
+  .goal-inputs {
+    display: grid;
+    gap: 1em;
+    margin-bottom: 2em;
+  }
+
+  .goal-inputs div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .goal-inputs label {
+    margin-bottom: 0.5em;
+    color: #666;
+  }
+
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2em;
+  }
+
+  .input-group {
+    margin-bottom: 1.5em;
+  }
+
+  .input-group label {
+    display: block;
+    margin-bottom: 0.5em;
+    color: #666;
+  }
+
+  /* Auth styles */
+  .auth-container {
+    max-width: 400px;
+    margin: 2em auto;
+    padding: 2em;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .auth-container h2 {
+    text-align: center;
+    margin-bottom: 1.5em;
+    color: #333;
+  }
+
+  .form-group {
+    margin-bottom: 1.5em;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5em;
+    color: #666;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 0.8em;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
+  }
+
+  .form-group input:focus {
+    outline: none;
+    border-color: #80a9d7;
+    box-shadow: 0 0 0 2px rgba(128, 169, 215, 0.2);
+  }
+
+  .error {
+    color: #dc3545;
+    font-size: 0.875em;
+    margin-top: 0.25em;
+    display: block;
+  }
+
+  .error-message {
+    background-color: #fff3f3;
+    color: #dc3545;
+    padding: 0.75em;
+    border-radius: 4px;
+    margin-bottom: 1em;
+    text-align: center;
+  }
+
+  .auth-footer {
+    margin-top: 2em;
+    text-align: center;
+  }
+
+  .auth-footer p {
+    margin-bottom: 0.5em;
+    color: #666;
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: #80a9d7;
+    border: 1px solid #80a9d7;
+  }
+
+  .btn-secondary:hover {
+    background-color: rgba(128, 169, 215, 0.1);
+  }
+

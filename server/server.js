@@ -2,11 +2,91 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
+const session = require('express-session');
+const passport = require('./config/passport');
+const jwt = require('jsonwebtoken');
+const connectDB = require('./config/database');
+const onboardingRoutes = require('./routes/onboarding');
+const authRoutes = require('./routes/auth');
 
 const app = express();
-app.use(cors());
- app.use(express.json());
-// In-memory leaderboard storage
+
+// Connect to MongoDB
+connectDB();
+
+// Middleware
+app.use(cors({
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    credentials: true,
+}));
+
+app.use(express.json());
+
+// Configure session middleware
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { 
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 24 * 60 * 60 * 1000,
+    }
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+//auth routes
+app.use('/api/auth', authRoutes);
+
+app.get('/auth/google',
+  passport.authenticate('google', { 
+    scope: ['profile', 'email'],
+    failureRedirect: '/login'
+  })
+);
+
+// Add callback route
+app.get('/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  (req, res) => {
+    // Generate JWT token
+    const token = jwt.sign(
+      { 
+        id: req.user.id,
+        email: req.user.email
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+    
+    // Redirect to frontend with token
+    res.redirect(`http://localhost:3000/oauth2/redirect/google?token=${token}`);
+  }
+);
+
+//auth status check
+app.get('/auth/status', (req, res) => {
+  res.json({
+    authenticated: req.isAuthenticated(),
+    user: req.user ? {
+      id: req.user.id,
+      email: req.user.email,
+      username: req.user.username,
+      onboarding: req.user.onboarding
+    } : null
+  });
+});
+
+app.get('/auth/logout', (req, res) => {
+  req.logout(() => {
+    res.redirect('http://localhost:3000');
+  });
+});
+
+//onboarding routes
+app.use('/api/onboarding', onboardingRoutes);
+
 let leaderboard = [];
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;

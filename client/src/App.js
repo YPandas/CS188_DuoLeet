@@ -1,7 +1,14 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Link, Navigate } from "react-router-dom";
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Leaderboard from "./components/Leaderboard";
+import Onboarding from "./components/Onboarding";
+import OAuth2RedirectHandler from "./components/OAuth2RedirectHandler";
 import "./index.css";
+import SignIn from './components/auth/SignIn';
+import SignUp from './components/auth/SignUp';
+import PlanSelection from './components/onboarding/PlanSelection';
+import OrganizationSetup from './components/onboarding/OrganizationSetup';
 
 export const topics = {
   Arrays: `Arrays are contiguous, fixed-size, index-based collections that store elements of the same type.
@@ -102,6 +109,7 @@ function MainPage() {
   const [evaluation, setEvaluation] = useState("");
   const [isCorrect, setIsCorrect] = useState(null);
   const [loading, setLoading] = useState(false);
+  const { user } = useAuth();
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [selectedProblem, setSelectedProblem] = useState(null);
 
@@ -109,8 +117,14 @@ function MainPage() {
     setLoading(true);
     setEvaluation("");
     try {
-      const res = await fetch("http://localhost:5001/api/question");
-      const data = await res.json();
+      const accessToken = localStorage.getItem('accessToken');
+      const response = await fetch("http://localhost:5001/api/question", {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        credentials: 'include'
+      });
+      const data = await response.json();
       setQuestion(data.question);
     } catch (err) {
       console.error(err);
@@ -121,9 +135,14 @@ function MainPage() {
   const submitAnswer = async () => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5001/api/verify", {
+      const accessToken = localStorage.getItem('accessToken');
+      const response = await fetch("http://localhost:5001/api/verify", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${accessToken}`
+        },
+        credentials: 'include',
         body: JSON.stringify({ question, userAnswer })
       });
       const data = await res.json();
@@ -134,6 +153,11 @@ function MainPage() {
     }
     setLoading(false);
   };
+
+  // Protected route check
+  if (!user) {
+    return <Navigate to="/signin" />;
+  }
 
   return (
     <div className="container">
@@ -297,22 +321,37 @@ Explanation: ${selectedProblem.example.explanation}`}
   );
 }
 
-function App() {
+function AppContent() {
+  const { user, logout } = useAuth();
+  
   return (
     <Router>
       <nav className="navigation">
-        <Link to="/" className="btn nav-btn">
-          🏠 Home
-        </Link>
-        <Link to="/leaderboard" className="btn nav-btn">
-          🏆 Leaderboard
-        </Link>
+        <Link to="/" className="btn nav-btn">🏠 Home</Link>
+        <Link to="/leaderboard" className="btn nav-btn">🏆 Leaderboard</Link>
+        {user && (
+          <button onClick={logout} className="btn nav-btn">🚪 Logout</button>
+        )}
       </nav>
       <Routes>
         <Route path="/" element={<MainPage />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/onboarding" element={<Onboarding />} />
+        <Route path="/onboarding/plan" element={<PlanSelection />} />
+        <Route path="/onboarding/organization" element={<OrganizationSetup />} />
+        <Route path="/oauth2/redirect/google" element={<OAuth2RedirectHandler />} />
       </Routes>
     </Router>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 
