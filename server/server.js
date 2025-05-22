@@ -147,44 +147,41 @@ app.post('/api/score', (req, res) => {
 app.post('/api/verify', async (req, res) => {
   const { question, userAnswer } = req.body;
   if (!question || !userAnswer) {
-    return res.status(400).json({ error: "Missing question or userAnswer in request body" });
+    return res.status(400).json({ error: 'Missing question or userAnswer in request body' });
   }
-  
   try {
-    const prompt = `
-Given the following LeetCode-style problem:
-${question}
-
-And the user's solution code:
-${userAnswer}
-
-Evaluate the solution. Explain why the solution is either correct or incorrect.
-    `;
-    
+    // Prompt the LLM to return a JSON object with correctness and explanation
+    const verifyPrompt = `Given the following LeetCode-style problem:\n${question}\n\nAnd the user's solution code:\n${userAnswer}\n\nRespond ONLY with a JSON object containing two fields:\n"isCorrect": true or false, indicating if the solution is correct, and\n"explanation": a brief explanation of why the solution is correct or why it fails.`;
     const response = await axios.post(
       OPENAI_URL,
       {
-        // Use GPT-4o Mini model for solution verification
-        model: "gpt-4o-mini",
+        model: 'gpt-4o-mini',
         messages: [
-          { role: "system", content: "You are a coding problem evaluator." },
-          { role: "user", content: prompt }
+          { role: 'system', content: 'You are a coding problem evaluator.' },
+          { role: 'user', content: verifyPrompt }
         ],
-        max_tokens: 150
+        max_tokens: 200
       },
       {
         headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${OPENAI_API_KEY}`
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${OPENAI_API_KEY}`
         }
       }
     );
-
-    const evaluation = response.data.choices[0].message.content;
-    res.json({ evaluation });
+    const content = response.data.choices[0].message.content.trim();
+    let parsed;
+    try {
+      parsed = JSON.parse(content);
+    } catch (err) {
+      // If JSON parse fails, return raw content as explanation and assume incorrect
+      return res.json({ isCorrect: false, evaluation: content });
+    }
+    const { isCorrect, explanation } = parsed;
+    return res.json({ isCorrect: Boolean(isCorrect), evaluation: explanation });
   } catch (error) {
     console.error(error.response ? error.response.data : error.message);
-    res.status(500).json({ error: "Failed to verify solution" });
+    res.status(500).json({ error: 'Failed to verify solution' });
   }
 });
 
