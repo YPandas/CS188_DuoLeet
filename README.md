@@ -76,6 +76,15 @@ A full-stack application for practicing programming interview questions with an 
 
 ---
 
+### Interaction Flows:
+
+* Our first interaction flow includes the main coding interface in DuoLeet where users can practice Leetcode style questions with the ability to check their work and view solutions to problems to solidify their understanding.
+  
+* Our second main interaction flow included the leaderboard/friends sections of our app, where users can compete with their friends to stay motivated to do coding interview problems. By implementing this second major interaction flow, we allow users to connect with others and work on problems collaboratively before an upcoming interview.
+
+
+---
+
 ### Authors
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
